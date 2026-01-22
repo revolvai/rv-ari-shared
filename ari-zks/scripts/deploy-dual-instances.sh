@@ -62,12 +62,31 @@ echo "╚═══════════════════════�
 echo ""
 
 # -----------------------------------------------------------------------------
+# Demander le nom de l'application
+# -----------------------------------------------------------------------------
+
+if [ -z "${APP_NAME:-}" ]; then
+    read -p "Nom de l'application (Entrée pour ari-rks-{uuid4short}): " USER_APP_NAME
+    if [ -z "$USER_APP_NAME" ]; then
+        # Générer un UUID court (8 caractères)
+        if command -v uuidgen &> /dev/null; then
+            UUID_SHORT=$(uuidgen | tr -d '-' | cut -c1-8)
+        else
+            UUID_SHORT=$(openssl rand -hex 4)
+        fi
+        APP_NAME="ari-rks-${UUID_SHORT}"
+        echo "   → Utilisation du nom par défaut: $APP_NAME"
+    else
+        APP_NAME="$USER_APP_NAME"
+    fi
+fi
+
+# -----------------------------------------------------------------------------
 # Configuration
 # -----------------------------------------------------------------------------
 
 RESOURCE_GROUP="${RESOURCE_GROUP:-ari-zks-rg}"
 LOCATION="${LOCATION:-westeurope}"
-APP_NAME="${APP_NAME:-ari-zks}"
 
 # Noms des ressources
 WEBAPP_PRIVATE_NAME="private-${APP_NAME}"
