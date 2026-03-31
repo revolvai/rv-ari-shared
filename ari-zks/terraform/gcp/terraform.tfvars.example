@@ -1,0 +1,14 @@
+# Copier ce fichier en terraform.tfvars et remplir les valeurs
+# cp terraform.tfvars.example terraform.tfvars
+
+project_id      = "mon-projet-gcp"
+container_image = "revolvregistry.azurecr.io/ari-zks:latest"
+registry_username = "myuser"
+registry_password = "mypassword"
+
+# Optionnel
+# region = "europe-west1"
+
+# Optionnel - secrets (générés automatiquement si non renseignés)
+# encryption_key       = ""
+# revolv_shared_secret = ""

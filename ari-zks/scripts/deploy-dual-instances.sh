@@ -66,7 +66,7 @@ echo ""
 # -----------------------------------------------------------------------------
 
 if [ -z "${APP_NAME:-}" ]; then
-    read -p "Nom de l'application (Entrée pour ari-rks-{uuid4short}): " USER_APP_NAME
+    read -p "Nom de l'application (Entrée pour ari-zks-{uuid4short}): " USER_APP_NAME
     if [ -z "$USER_APP_NAME" ]; then
         # Générer un UUID court (8 caractères)
         if command -v uuidgen &> /dev/null; then
@@ -74,7 +74,7 @@ if [ -z "${APP_NAME:-}" ]; then
         else
             UUID_SHORT=$(openssl rand -hex 4)
         fi
-        APP_NAME="ari-rks-${UUID_SHORT}"
+        APP_NAME="ari-zks-${UUID_SHORT}"
         echo "   → Utilisation du nom par défaut: $APP_NAME"
     else
         APP_NAME="$USER_APP_NAME"

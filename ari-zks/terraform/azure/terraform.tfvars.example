@@ -1,0 +1,18 @@
+# Copier ce fichier en terraform.tfvars et remplir les valeurs
+# cp terraform.tfvars.example terraform.tfvars
+
+# Le nom de l'application est toujours auto-généré (ari-zks-{hex8})
+# pour garantir l'unicité des ressources Azure.
+
+container_image = "revolvregistry.azurecr.io/ari-zks:latest"
+registry_username = "myuser"
+registry_password = "mypassword"
+
+# run python3 -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())" to generate the encryption key
+encryption_key       = ""
+
+# Optionnel - région et resource group
+# resource_group_name = "ari-zks-rg"
+# location            = "westeurope"
+
+# revolv_shared_secret = ""
