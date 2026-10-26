@@ -1,0 +1,18 @@
+%%{init: {"flowchart": {"nodeSpacing": 25, "rankSpacing": 40}}}%%
+flowchart LR
+    subgraph REVOLV["Revolv Registry"]
+        REG[revolvregistry.azurecr.io]
+    end
+
+    subgraph PROJECT["GCP Project"]
+        AR["Artifact Registry<br/>dépôt distant"]
+        CRP["Cloud Run<br/>Private"]
+        CRU["Cloud Run<br/>Public"]
+        BK[("Bucket GCS<br/>/app/data")]
+    end
+
+    REG -- proxy --> AR
+    AR -- pull --> CRP
+    AR -- pull --> CRU
+    CRP --> BK
+    CRU --> BK

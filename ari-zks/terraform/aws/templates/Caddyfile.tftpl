@@ -1,0 +1,15 @@
+public.${host} {
+	reverse_proxy 127.0.0.1:8002
+}
+
+private.${host} {
+%{ if length(private_allowed_cidrs) > 0 ~}
+	@allowed remote_ip ${join(" ", private_allowed_cidrs)}
+	handle @allowed {
+		reverse_proxy 127.0.0.1:8001
+	}
+%{ endif ~}
+	handle {
+		respond 403
+	}
+}

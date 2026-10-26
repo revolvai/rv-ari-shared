@@ -13,9 +13,14 @@ output "service_public_url" {
   value       = google_cloud_run_v2_service.public.uri
 }
 
-output "filestore_ip" {
-  description = "IP du Filestore NFS"
-  value       = google_filestore_instance.main.netwozks[0].ip_addresses[0]
+output "bucket_name" {
+  description = "Nom du bucket GCS partagé"
+  value       = google_storage_bucket.shared_data.name
+}
+
+output "artifact_registry_image" {
+  description = "Image servie via le dépôt distant Artifact Registry"
+  value       = local.artifact_image
 }
 
 output "encryption_key" {

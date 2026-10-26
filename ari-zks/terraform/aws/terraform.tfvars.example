@@ -1,0 +1,24 @@
+# Copier ce fichier en terraform.tfvars et remplir les valeurs
+# cp terraform.tfvars.example terraform.tfvars
+
+container_image   = "revolvregistry.azurecr.io/ari-zks:latest"
+registry_username = "myuser"
+registry_password = "mypassword"
+
+# Optionnel
+# region    = "eu-west-1"
+# bundle_id = "micro_3_0"   # nano_3_0 ($5, 0.5 Go) / micro_3_0 ($7, 1 Go) / small_3_0 ($12, 2 Go)
+
+# Optionnel - domaine (public.<domain> / private.<domain>), sinon <ip>.sslip.io
+# domain = "client.example.com"
+
+# Optionnel - IPs autorisées à joindre l'instance Private (vide = tunnel SSH uniquement)
+# private_allowed_cidrs = ["203.0.113.10/32"]
+
+# Optionnel - SSH (sinon clé par défaut Lightsail et SSH navigateur de la console)
+# ssh_public_key    = "ssh-ed25519 AAAA... moi@poste"
+# ssh_allowed_cidrs = ["203.0.113.10/32"]
+
+# Optionnel - secrets (générés automatiquement si non renseignés)
+# encryption_key       = ""
+# revolv_shared_secret = ""

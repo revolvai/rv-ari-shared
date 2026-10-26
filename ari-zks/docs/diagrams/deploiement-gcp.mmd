@@ -1,0 +1,7 @@
+flowchart LR
+    G1([terraform apply]) --> G2[APIs]
+    G2 --> G3["Bucket GCS<br/>Secret + Artifact Registry"]
+    G3 --> G4[Cloud Run Private]
+    G3 --> G5[Cloud Run Public]
+    G4 --> G6([Outputs])
+    G5 --> G6

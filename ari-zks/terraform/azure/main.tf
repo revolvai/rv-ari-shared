@@ -39,7 +39,8 @@ resource "random_id" "revolv_shared_secret" {
 
 locals {
   app_name             = "ari-zks-${random_id.app_suffix.hex}"
-  encryption_key       = var.encryption_key != "" ? var.encryption_key : random_id.encryption_key[0].b64_url
+  # Clé Fernet : base64 url-safe AVEC padding (b64_url n'a pas de padding)
+  encryption_key       = var.encryption_key != "" ? var.encryption_key : replace(replace(random_id.encryption_key[0].b64_std, "+", "-"), "/", "_")
   revolv_shared_secret = var.revolv_shared_secret != "" ? var.revolv_shared_secret : random_id.revolv_shared_secret[0].hex
 
   # Noms des ressources dérivés du app_name

@@ -6,11 +6,11 @@
 # avec un Azure File Share partagé entre les deux instances.
 #
 # Usage:
-#   ./deploy-dual-instances.sh <container-image> [registry-username] [registry-password]
+#   ./deploy-azure-dual-instances.sh <container-image> [registry-username] [registry-password]
 #
 # Exemple:
-#   ./deploy-dual-instances.sh revolv-registry.azurecr.io/ari-zks:latest
-#   ./deploy-dual-instances.sh revolv-registry.azurecr.io/ari-zks:latest myuser mypassword
+#   ./deploy-azure-dual-instances.sh revolv-registry.azurecr.io/ari-zks:latest
+#   ./deploy-azure-dual-instances.sh revolv-registry.azurecr.io/ari-zks:latest myuser mypassword
 #
 # Note: L'image doit être disponible dans le registry Revolv.
 #       Utilisez scripts/revolv-build-push.sh pour build et push l'image.
@@ -97,7 +97,7 @@ FILE_SHARE_NAME="shared-data"
 MOUNT_PATH="/app/data"
 
 # Secrets
-ENCRYPTION_KEY="${ENCRYPTION_KEY:-$(openssl rand -base64 32)}"
+ENCRYPTION_KEY="${ENCRYPTION_KEY:-$(openssl rand -base64 32 | tr "+/" "-_")}"  # clé Fernet (base64 url-safe)
 REVOLV_SHARED_SECRET="${REVOLV_SHARED_SECRET:-$(openssl rand -hex 32)}"
 
 # -----------------------------------------------------------------------------

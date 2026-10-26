@@ -1,0 +1,19 @@
+%%{init: {"flowchart": {"nodeSpacing": 25, "rankSpacing": 40}}}%%
+flowchart LR
+    subgraph REVOLV["Revolv Registry"]
+        REG[revolvregistry.azurecr.io]
+    end
+
+    subgraph RG["Resource Group — ari-zks-rg"]
+        subgraph ASP["App Service Plan B1"]
+            WP["Web App<br/>Private"]
+            WU["Web App<br/>Public"]
+        end
+
+        FS[("Azure Files<br/>/app/data")]
+    end
+
+    REG -- pull --> WP
+    REG -- pull --> WU
+    WP --> FS
+    WU --> FS

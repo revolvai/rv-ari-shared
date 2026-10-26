@@ -1,0 +1,47 @@
+#!/bin/bash
+# Bootstrap de l'instance : Docker, disque de données, Caddy, puis déploiement des deux instances
+set -euo pipefail
+
+APP_DIR=/opt/ari-zks
+VOLUME_DIR=$APP_DIR/volume
+
+dnf install -y docker
+systemctl enable --now docker
+
+# Configuration (image, credentials registry, secrets) : un fichier par valeur, root uniquement
+mkdir -p $APP_DIR/config
+chmod 700 $APP_DIR/config
+%{ for name, value in config ~}
+echo '${base64encode(value)}' | base64 -d > $APP_DIR/config/${name}
+%{ endfor ~}
+chmod 600 $APP_DIR/config/*
+
+# Disque de données Lightsail (attaché après le démarrage) : premier disque autre que le disque système
+ROOT_DISK=/dev/$(lsblk -no PKNAME "$(findmnt -no SOURCE /)")
+DEVICE=""
+for i in $(seq 1 60); do
+  DEVICE=$(lsblk -dpno NAME,TYPE | awk -v root="$ROOT_DISK" '$2 == "disk" && $1 != root && $1 !~ /zram/ { print $1; exit }')
+  [ -n "$DEVICE" ] && break
+  sleep 5
+done
+[ -n "$DEVICE" ] || { echo "Disque de données introuvable" >&2; exit 1; }
+
+blkid "$DEVICE" || mkfs.ext4 "$DEVICE"
+mkdir -p "$VOLUME_DIR"
+echo "UUID=$(blkid -s UUID -o value "$DEVICE") $VOLUME_DIR ext4 defaults,nofail 0 2" >> /etc/fstab
+mount -a
+mkdir -p "$VOLUME_DIR/app" "$VOLUME_DIR/caddy"
+# Accessible en écriture quel que soit l'utilisateur du container
+chmod 777 "$VOLUME_DIR/app"
+
+echo '${base64encode(deploy_script)}' | base64 -d > $APP_DIR/deploy.sh
+chmod 700 $APP_DIR/deploy.sh
+echo '${base64encode(caddyfile)}' | base64 -d > $APP_DIR/Caddyfile
+
+# Reverse proxy HTTPS (certificats Let's Encrypt automatiques)
+docker run -d --name caddy --restart unless-stopped --network host \
+  -v $APP_DIR/Caddyfile:/etc/caddy/Caddyfile:ro \
+  -v "$VOLUME_DIR/caddy":/data \
+  caddy:2
+
+$APP_DIR/deploy.sh

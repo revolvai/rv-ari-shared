@@ -1,0 +1,24 @@
+%%{init: {"flowchart": {"nodeSpacing": 25, "rankSpacing": 40}}}%%
+flowchart LR
+    USERS([Internet])
+    ADMINS(["IPs autorisées"])
+
+    subgraph LS["Instance Lightsail 1 Go — Docker"]
+        CAD["Caddy<br/>HTTPS"]
+        EU["Container<br/>Public"]
+        EP["Container<br/>Private"]
+    end
+
+    DISK[("Disque Lightsail<br/>/app/data")]
+
+    subgraph REVOLV["Revolv Registry"]
+        REG[revolvregistry.azurecr.io]
+    end
+
+    USERS -- "public.*" --> CAD
+    ADMINS -- "private.*" --> CAD
+    CAD --> EU
+    CAD --> EP
+    EU --> DISK
+    EP --> DISK
+    REG -. pull .-> LS

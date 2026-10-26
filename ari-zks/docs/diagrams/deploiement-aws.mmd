@@ -1,0 +1,6 @@
+%%{init: {"flowchart": {"nodeSpacing": 25, "rankSpacing": 40}}}%%
+flowchart LR
+    W1([terraform apply]) --> W2["IP statique<br/>Disque de données"]
+    W2 --> W3[Instance Lightsail]
+    W3 --> W4["Attachement<br/>disque + IP<br/>Ports 80 / 443"]
+    W4 --> W5(["Script de lancement<br/>Docker, Caddy, deploy.sh"])

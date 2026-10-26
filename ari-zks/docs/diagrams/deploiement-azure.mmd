@@ -1,0 +1,7 @@
+flowchart LR
+    A1([terraform apply]) --> A2[Resource Group]
+    A2 --> A3["Storage Account<br/>File Share<br/>App Service Plan"]
+    A3 --> A4[Web App Private]
+    A3 --> A5[Web App Public]
+    A4 --> A6([Outputs])
+    A5 --> A6
